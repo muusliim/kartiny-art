@@ -20,6 +20,13 @@ const checkTextInput = selector => {
         e.preventDefault();
       }
     });
+    input.addEventListener('input', () => {
+      input.style.cssText = 'border: none';
+      if (input.value.match(/[^а-яё 0-9]/ig)) {
+        input.value = '';
+        input.style.cssText = 'border: 1px solid red';
+      }
+    });
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkTextInput);
@@ -36,6 +43,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
 // import checkNumInputs from "./checkNumInputs";
 // import { closeModalByTime } from "./modals";
 
@@ -57,13 +65,6 @@ const forms = () => {
   const path = {
     designer: 'assets/server.php',
     consultation: 'assets/consultation.php'
-  };
-  const postData = async (url, data) => {
-    let res = await fetch(url, {
-      method: 'POST',
-      body: data
-    });
-    return await res.text();
   };
   const clearInputs = () => {
     inputs.forEach(item => {
@@ -103,7 +104,7 @@ const forms = () => {
       let api;
       item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.consultation;
       console.log(api);
-      postData(api, formData).then(res => {
+      (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.postData)(api, formData).then(res => {
         console.log(res);
         statusImg.setAttribute('src', message.ok);
         textMessage.textContent = message.success;
@@ -162,14 +163,18 @@ const mask = selector => {
     this.value = matrix.replace(/./g, function (a) {
       return /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? '' : a;
     });
-    console.log(i);
-    console.log(val.length);
-    if (e.type === 'blur') {
-      if (this.value.length == 2) {
-        this.value = '';
-      } else {
-        setCursorPosition(this.value.length, this);
-      }
+
+    // if (e.type === 'blur') {
+    //     if (this.value.length == 2) {
+    //         this.value = '';
+    // //     } else {
+    // //         setCursorPosition(this.value.length, this);
+    // //     }
+    // }
+
+    if (this.value.charAt(1) != '7') {
+      this.value = '';
+      this.blur();
     }
   }
   let inputs = document.querySelectorAll(selector);
@@ -284,6 +289,64 @@ const modals = () => {
 
 /***/ }),
 
+/***/ "./src/js/modules/showMoreStyles.js":
+/*!******************************************!*\
+  !*** ./src/js/modules/showMoreStyles.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _services_requests__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../services/requests */ "./src/js/services/requests.js");
+
+const showMoreStyles = (trigger, wrapper) => {
+  const btn = document.querySelector(trigger);
+
+  //     // btn.addEventListener('click', () => {
+  //     //     cards.forEach(card => {
+  //     //         card.classList.remove('hidden-lg', 'hidden-md', 'hidden-sm', 'hidden-xs');
+  //     //         card.classList.add('animated', 'fadeInUp', 'col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+  //     //     });
+  //     //     btn.remove();
+  //     // });
+
+  btn.addEventListener('click', function () {
+    (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.getResource)('http://localhost1:3000/styles').then(res => createCards(res)).catch(() => failCards());
+    this.remove();
+  });
+  function failCards() {
+    const failDiv = document.createElement('div');
+    failDiv.classList.add('status');
+    failDiv.textContent = `Произошла ошибка :( 
+                                Повторите позже`;
+    failDiv.style.cssText = 'width: 330px; text-align: center; font-size:220%; color:red; margin:0 auto';
+    document.querySelector(wrapper).append(failDiv);
+  }
+  function createCards(response) {
+    response.forEach(_ref => {
+      let {
+        src,
+        title,
+        link
+      } = _ref;
+      const card = document.createElement('div');
+      card.classList.add('animated', 'fadeInDown', 'col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+      card.innerHTML = `
+                    <div class="styles-block">
+                        <img src=${src} alt"style">
+                        <h4>${title}</h4>
+                        <a href="${link}">Подробнее</a> 
+                    </div>`;
+      document.querySelector(wrapper).append(card);
+    });
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (showMoreStyles);
+
+/***/ }),
+
 /***/ "./src/js/modules/sliders.js":
 /*!***********************************!*\
   !*** ./src/js/modules/sliders.js ***!
@@ -352,6 +415,35 @@ const slider = (slides, dir, prev, next) => {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (slider);
+
+/***/ }),
+
+/***/ "./src/js/services/requests.js":
+/*!*************************************!*\
+  !*** ./src/js/services/requests.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getResource: () => (/* binding */ getResource),
+/* harmony export */   postData: () => (/* binding */ postData)
+/* harmony export */ });
+const postData = async (url, data) => {
+  let res = await fetch(url, {
+    method: 'POST',
+    body: data
+  });
+  return await res.text();
+};
+const getResource = async url => {
+  let res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Could not fetch ${url}, status ${res.status}`);
+  }
+  return await res.json();
+};
+
 
 /***/ })
 
@@ -423,6 +515,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
+/* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
+
 
 
 
@@ -438,6 +532,7 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_mask__WEBPACK_IMPORTED_MODULE_3__["default"])('[name="phone"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
+  (0,_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
 });
 })();
 
