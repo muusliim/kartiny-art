@@ -2,6 +2,42 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/modules/calc.js":
+/*!********************************!*\
+  !*** ./src/js/modules/calc.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const calc = (size, material, options, promo, result) => {
+  const sizeBlock = document.querySelector(size),
+    materialBlock = document.querySelector(material),
+    optionsBlock = document.querySelector(options),
+    promoBlock = document.querySelector(promo),
+    resultBlock = document.querySelector(result);
+  let sum = 0;
+  const calcFunction = () => {
+    sum = Math.round(+sizeBlock.value * +materialBlock.value + +optionsBlock.value);
+    if (!sizeBlock.value || !materialBlock.value) {
+      resultBlock.textContent = 'Пожалуйста, выберите размер и материал картины';
+    } else if (promoBlock.value.toUpperCase() === 'IWANTPOPART') {
+      resultBlock.textContent = `Итоговая сумма: ${Math.round(sum * 0.7)}`;
+    } else {
+      resultBlock.textContent = `Итоговая сумма: ${sum}`;
+    }
+  };
+  sizeBlock.addEventListener('change', calcFunction);
+  materialBlock.addEventListener('change', calcFunction);
+  optionsBlock.addEventListener('change', calcFunction);
+  promoBlock.addEventListener('input', calcFunction);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (calc);
+
+/***/ }),
+
 /***/ "./src/js/modules/checkTextInputs.js":
 /*!*******************************************!*\
   !*** ./src/js/modules/checkTextInputs.js ***!
@@ -30,6 +66,57 @@ const checkTextInput = selector => {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkTextInput);
+
+/***/ }),
+
+/***/ "./src/js/modules/filter.js":
+/*!**********************************!*\
+  !*** ./src/js/modules/filter.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const filter = () => {
+  const menu = document.querySelector('.portfolio-menu'),
+    items = menu.querySelectorAll('li'),
+    wrapper = document.querySelector('.portfolio-wrapper'),
+    markAll = wrapper.querySelectorAll('.all'),
+    no = document.querySelector('.portfolio-no');
+  const typeFilter = markType => {
+    markAll.forEach(item => {
+      item.style.display = 'none';
+      item.classList.remove('animated', 'fadeIn');
+    });
+    no.style.display = 'none';
+    no.classList.remove('animated', 'fadeIn');
+    if (markType.length) {
+      markType.forEach(mark => {
+        mark.style.display = 'block';
+        mark.classList.add('animated', 'fadeIn');
+      });
+    } else {
+      no.style.display = 'block';
+      no.classList.add('animated', 'fadeIn');
+    }
+  };
+  items.forEach(item => {
+    item.addEventListener('click', e => {
+      const selector = wrapper.querySelectorAll(`.${e.target.classList[0]}`);
+      typeFilter(selector);
+    });
+  });
+  menu.addEventListener('click', e => {
+    const target = e.target;
+    if (target && target.tagName == 'LI') {
+      items.forEach(item => item.classList.remove('active'));
+      target.classList.add('active');
+    }
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (filter);
 
 /***/ }),
 
@@ -516,6 +603,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_mask__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/mask */ "./src/js/modules/mask.js");
 /* harmony import */ var _modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/checkTextInputs */ "./src/js/modules/checkTextInputs.js");
 /* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
+/* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
+/* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/filter */ "./src/js/modules/filter.js");
+
+
 
 
 
@@ -525,6 +616,7 @@ __webpack_require__.r(__webpack_exports__);
 window.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
+  let modalState = {};
   (0,_modules_modals__WEBPACK_IMPORTED_MODULE_0__["default"])();
   (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.feedback-slider-item', 'horizontal', '.main-prev-btn', '.main-next-btn');
   (0,_modules_sliders__WEBPACK_IMPORTED_MODULE_1__["default"])('.main-slider-item', 'vertical');
@@ -533,6 +625,8 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="name"]');
   (0,_modules_checkTextInputs__WEBPACK_IMPORTED_MODULE_4__["default"])('[name="message"]');
   (0,_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
+  (0,_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price', modalState);
+  (0,_modules_filter__WEBPACK_IMPORTED_MODULE_7__["default"])();
 });
 })();
 
