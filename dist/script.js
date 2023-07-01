@@ -2,6 +2,86 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/modules/accordion.js":
+/*!*************************************!*\
+  !*** ./src/js/modules/accordion.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const accordion = triggersSelector => {
+  const btns = document.querySelectorAll(triggersSelector);
+  //   blocks = document.querySelectorAll(itemsSelector);
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', e => {
+      const target = e.currentTarget;
+      btns.forEach(btn => {
+        if (!btn.classList.contains('active-class')) {
+          btn.classList.remove('active-style');
+          btn.nextElementSibling.classList.remove('active-content');
+          btn.nextElementSibling.style.maxHeight = '0px';
+        }
+      });
+      target.classList.toggle('active-style');
+      target.nextElementSibling.classList.toggle('active-content');
+      if (target.classList.contains('active-style')) {
+        target.classList.add('active-style');
+        target.nextElementSibling.style.maxHeight = target.nextElementSibling.scrollHeight + 80 + 'px';
+      } else {
+        target.nextElementSibling.style.maxHeight = '0px';
+      }
+    });
+  });
+
+  // BY CSS 
+  // blocks.forEach(block => {
+  //     block.classList.add('animated', 'fadeInDown');
+  // });
+
+  // btns.forEach(btn => {
+  //     btn.addEventListener('click', (e) => {
+  //         if (!e.currentTarget.classList.contains('active')){
+  //             btns.forEach(btn => {
+  //                 btn.classList.remove('active', 'active-style');
+  //             });
+  //             e.currentTarget.classList.add('active', 'active-style');
+  //         }
+  //     });
+  // });
+
+  // function hideContent() {
+  //     blocks.forEach(block => {
+  //         block.classList.remove('animated', 'fadeInDown');
+  //         block.style.display = 'none';
+  //     });
+  // }
+
+  // function showContent(content) {
+  //         content.classList.add('animated', 'backInDown');
+  //         content.style.display = 'block';
+  //      }
+
+  // btns.forEach(btn => {
+  //    btn.addEventListener('click', () => {
+  //     if (btn.nextElementSibling.style.display == 'none'){
+  //         showContent(btn.nextElementSibling);
+  //     } else {
+  //         hideContent(btn.nextElementSibling);
+  //     }
+  //    });
+  // });
+
+  // hideContent();
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (accordion);
+
+/***/ }),
+
 /***/ "./src/js/modules/calc.js":
 /*!********************************!*\
   !*** ./src/js/modules/calc.js ***!
@@ -376,6 +456,41 @@ const modals = () => {
 
 /***/ }),
 
+/***/ "./src/js/modules/pictureSize.js":
+/*!***************************************!*\
+  !*** ./src/js/modules/pictureSize.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const pictureSize = imgSelector => {
+  const blocks = document.querySelectorAll(imgSelector);
+  function showImg(block) {
+    const img = block.querySelector('img');
+    img.src = img.src.slice(0, -4) + '-1.png';
+    block.querySelectorAll('p:not(.sizes-hit').forEach(item => item.style.display = 'none');
+  }
+  function hideImg(block) {
+    const img = block.querySelector('img');
+    img.src = img.src.slice(0, -6) + '.png';
+    block.querySelectorAll('p').forEach(item => item.style.display = 'block');
+  }
+  blocks.forEach(block => {
+    block.addEventListener('mouseover', () => {
+      showImg(block);
+    });
+    block.addEventListener('mouseout', () => {
+      hideImg(block);
+    });
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (pictureSize);
+
+/***/ }),
+
 /***/ "./src/js/modules/showMoreStyles.js":
 /*!******************************************!*\
   !*** ./src/js/modules/showMoreStyles.js ***!
@@ -400,7 +515,7 @@ const showMoreStyles = (trigger, wrapper) => {
   //     // });
 
   btn.addEventListener('click', function () {
-    (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.getResource)('http://localhost1:3000/styles').then(res => createCards(res)).catch(() => failCards());
+    (0,_services_requests__WEBPACK_IMPORTED_MODULE_0__.getResource)('http://localhost:3000/styles').then(res => createCards(res)).catch(() => failCards());
     this.remove();
   });
   function failCards() {
@@ -605,6 +720,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./modules/showMoreStyles */ "./src/js/modules/showMoreStyles.js");
 /* harmony import */ var _modules_calc__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./modules/calc */ "./src/js/modules/calc.js");
 /* harmony import */ var _modules_filter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./modules/filter */ "./src/js/modules/filter.js");
+/* harmony import */ var _modules_pictureSize__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./modules/pictureSize */ "./src/js/modules/pictureSize.js");
+/* harmony import */ var _modules_accordion__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./modules/accordion */ "./src/js/modules/accordion.js");
+
+
 
 
 
@@ -627,6 +746,8 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_showMoreStyles__WEBPACK_IMPORTED_MODULE_5__["default"])('.button-styles', '#styles .row');
   (0,_modules_calc__WEBPACK_IMPORTED_MODULE_6__["default"])('#size', '#material', '#options', '.promocode', '.calc-price', modalState);
   (0,_modules_filter__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  (0,_modules_pictureSize__WEBPACK_IMPORTED_MODULE_8__["default"])('.sizes-block');
+  (0,_modules_accordion__WEBPACK_IMPORTED_MODULE_9__["default"])('.accordion-heading');
 });
 })();
 

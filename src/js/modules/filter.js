@@ -23,6 +23,7 @@ const filter = () => {
             no.style.display = 'block';
             no.classList.add('animated', 'fadeIn');
         }
+
     };
 
     items.forEach(item => {

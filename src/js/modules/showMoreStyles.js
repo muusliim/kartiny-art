@@ -12,7 +12,7 @@ const showMoreStyles = (trigger, wrapper) => {
 //     // });
 
     btn.addEventListener('click', function() {
-        getResource('http://localhost1:3000/styles')
+        getResource('http://localhost:3000/styles')
         .then(res => createCards(res))
         .catch(() => failCards());
 
