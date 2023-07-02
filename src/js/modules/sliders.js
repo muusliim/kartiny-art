@@ -47,7 +47,7 @@ const slider = (slides, dir, prev, next) => {
         if (dir === 'vertical') {
             paused = setInterval(() => {
                 plusSlides(1);
-                items[slideIndex - 1].classList.add('slideInDown');
+                items[slideIndex - 1].classList.add('pulse');
             }, 3000);
         } else {
            paused = setInterval(() => {
