@@ -33,6 +33,7 @@
 }
 html {
   font-size: 10px;
+  scroll-behavior: smooth;
 }
 body {
   font-family: 'Circe Regular', sans-serif;
@@ -1283,6 +1284,20 @@ h4 {
 
 .status {
   text-align: center;
+}
+
+.pageup {
+  opacity: 0;
+width: 26px ;
+height: 26px;
+position: fixed;
+bottom: 100px;
+right: 5%;
+z-index: 30;
+background-color: #fff;
+cursor: pointer;
+border: 1px solid white;
+  transition: 0.6s all;
 }
 @media (max-width: 1399px) {
   .paints {
